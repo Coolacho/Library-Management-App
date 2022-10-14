@@ -3,12 +3,12 @@ package gui;
 import javax.swing.*;
 import javax.swing.table.*;
 
-import fundamentals.ClientTableModel;
 import fundamentals.RegisterTemplate;
+import fundamentals.ClientModels;
 
 public class ClientRegister extends RegisterTemplate{
 
-		public ClientTableModel tableModel;
+		public ClientModels.ClientTableModel tableModel;
 	
 		public ClientRegister(JPanel contentPane) {
 			super(contentPane);
@@ -17,18 +17,13 @@ public class ClientRegister extends RegisterTemplate{
 
 		@Override
 		protected void setTableModel() {
-			if (MainFrame.clients != null) {
-				tableModel = new ClientTableModel(MainFrame.clients);
-			}
-			else {
-				tableModel = new ClientTableModel();
-			}
+			tableModel = MainFrame.clientModels.tableModel;
 			table.setModel(tableModel);
 		}
 
 		@Override
 		protected void setTableSorter() {
-			tableSorter = new TableRowSorter<ClientTableModel>(tableModel);
+			tableSorter = new TableRowSorter<ClientModels.ClientTableModel>(tableModel);
 			table.setRowSorter(tableSorter);
 		}
 

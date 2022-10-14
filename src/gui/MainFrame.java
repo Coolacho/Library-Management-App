@@ -2,19 +2,17 @@ package gui;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.util.ArrayList;
-
 import javax.swing.*;
 
-import fundamentals.Book;
-import fundamentals.Client;
+import fundamentals.BookModels;
+import fundamentals.ClientModels;
 import fundamentals.LoginSystemUtils;
 
 public class MainFrame extends JFrame{
 
 	private JPanel contentPane;
-	static ArrayList<Client> clients;
-	static ArrayList<Book> books;
+	public static ClientModels clientModels;
+	public static BookModels bookModels;
 	
 	//Different panes in the application
 	public static LoginMenu LOGIN_MENU;
@@ -46,8 +44,8 @@ public class MainFrame extends JFrame{
 			}
 		});
 		
-		clients = LoginSystemUtils.loadClients();
-		books = LoginSystemUtils.loadBooks();
+		clientModels = new ClientModels();
+		bookModels = new BookModels();
 		
 		contentPane = new JPanel();
 		contentPane.setLayout(new CardLayout());

@@ -104,7 +104,7 @@ public final class LoginSystemUtils {
 				
 			}
 			Client.NUMBER_OF_CLIENTS = 0;
-			return null;
+			return new ArrayList<Client>();
 		}
 		
 		@SuppressWarnings("unchecked")

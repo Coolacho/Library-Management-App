@@ -3,12 +3,12 @@ package gui;
 import javax.swing.*;
 import javax.swing.table.*;
 
-import fundamentals.BookTableModel;
 import fundamentals.RegisterTemplate;
+import fundamentals.BookModels;
 
 public class BookRegister extends RegisterTemplate{
 	
-	public BookTableModel tableModel;
+	public BookModels.BookTableModel tableModel;
 	
 	public BookRegister(JPanel contentPane) {
 		super(contentPane);
@@ -16,18 +16,13 @@ public class BookRegister extends RegisterTemplate{
 
 	@Override
 	protected void setTableModel() {
-		if (MainFrame.books != null) {
-			tableModel = new BookTableModel(MainFrame.books);
-		}
-		else {
-			tableModel = new BookTableModel();
-		}
+		tableModel = MainFrame.bookModels.tableModel;
 		table.setModel(tableModel);
 	}
 
 	@Override
 	protected void setTableSorter() {
-		tableSorter = new TableRowSorter<BookTableModel>(tableModel);
+		tableSorter = new TableRowSorter<BookModels.BookTableModel>(tableModel);
 		table.setRowSorter(tableSorter);
 	}
 

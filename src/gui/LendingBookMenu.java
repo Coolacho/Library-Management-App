@@ -6,8 +6,8 @@ import java.awt.event.*;
 
 import javax.swing.*;
 
-import fundamentals.BookListModel;
-import fundamentals.ClientListModel;
+import fundamentals.BookModels;
+import fundamentals.ClientModels;
 
 public class LendingBookMenu extends JPanel{
 
@@ -52,14 +52,9 @@ public class LendingBookMenu extends JPanel{
 		clientChooserPane = new JPanel();
 		clientChooserPane.setLayout(new BoxLayout(clientChooserPane, BoxLayout.PAGE_AXIS));
 		
-		ClientListModel listModel;
+		ClientModels.ClientListModel listModel;
 		
-		if (MainFrame.clients != null) {
-			listModel = new ClientListModel(MainFrame.clients);
-		}
-		else {
-			listModel = new ClientListModel();
-		}
+		listModel = MainFrame.clientModels.listModel;
 		
 		clientList = new JList<String>();
 		clientList.setModel(listModel);
@@ -74,16 +69,11 @@ public class LendingBookMenu extends JPanel{
 	private void setBookChooserPane() {
 		
 		bookChooserPane = new JPanel();
-		//bookChooserPane.setLayout(new BoxLayout(clientChooserPane, BoxLayout.PAGE_AXIS));
+		bookChooserPane.setLayout(new BoxLayout(bookChooserPane, BoxLayout.PAGE_AXIS));
 		
-		BookListModel listModel;
+		BookModels.BookListModel listModel;
 		
-		if (MainFrame.books != null) {
-			listModel = new BookListModel(MainFrame.books);
-		}
-		else {
-			listModel = new BookListModel();
-		}
+		listModel = MainFrame.bookModels.listModel;
 		
 		bookList = new JList<String>();
 		bookList.setModel(listModel);
