@@ -1,6 +1,7 @@
 package fundamentals;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 public class Book implements Serializable{
 	
@@ -9,6 +10,8 @@ public class Book implements Serializable{
 	private String id;
 	private boolean taken;
 	public static int NUMBER_OF_BOOKS;
+	private LocalDateTime timeTaken;
+	private LocalDateTime timeReturned;
 	
 	public Book(String title, String author) {
 		setTitle(title);
@@ -34,6 +37,15 @@ public class Book implements Serializable{
 		this.taken = taken;
 	}
 	
+	public void setTimeTaken() {
+		this.timeTaken = LocalDateTime.now();
+		this.timeReturned = null;
+	}
+	
+	public void setTimeReturned() {
+		this.timeReturned = LocalDateTime.now();
+	}
+	
 	//GETTERS
 	public String getTitle() {
 		return this.title;
@@ -49,6 +61,37 @@ public class Book implements Serializable{
 	
 	public boolean getTaken() {
 		return this.taken;
+	}
+	
+	public LocalDateTime getTimeTaken() {
+		return this.timeTaken;
+	}
+	
+	public LocalDateTime getTimeReturned() {
+		return this.timeReturned;
+	}
+	
+	//Functions to manage the take and return of a book
+	public void takeBook() {
+		setTaken(true);
+		setTimeTaken();
+	}
+	
+	public void returnBook() {
+		setTaken(false);
+		setTimeReturned();
+	}
+	
+	public String getBookStatus() {
+		if (timeReturned == null) {
+			return "Taken";
+		}
+		else if (timeReturned.isBefore(timeTaken.plusDays(14))) {
+			return "Returned";
+		}
+		else {
+			return "Overdue";
+		}
 	}
 	
 	private static final long serialVersionUID = 1L;

@@ -135,6 +135,10 @@ public class ClientModels {
 		public void removeClientFromList(int rowIndex) {
 			fireIntervalRemoved(this, rowIndex, rowIndex);
 		}
+		
+		public Client getClient(int rowIndex) {
+			return clients.get(rowIndex);
+		}
 
 		private static final long serialVersionUID = 1L;
 		

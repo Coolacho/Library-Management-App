@@ -1,69 +1,83 @@
 package gui;
 
-import java.awt.CardLayout;
-import java.awt.Dimension;
+import java.awt.*;
 import java.awt.event.*;
 
 import javax.swing.*;
 
 import fundamentals.BookModels;
-import fundamentals.ClientModels;
 
 public class LendingBookMenu extends JPanel{
 
-	private JPanel clientChooserPane;
-	private JList<String> clientList;
+	private JPanel centerPane;
+	private JPanel optionsPane;
+	
+	private ClientChooserPane clientChooserPane;
 	
 	private JPanel bookChooserPane;
 	private JList<String> bookList;
 	
-	private JButton backButton;
-	
 	public LendingBookMenu(JPanel contentPane) {
 		
 		//set up the panel
-		setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
+		setLayout(new BorderLayout());
 		setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 		setOpaque(true);
 		setMinimumSize(new Dimension(960, 540));
 		setPreferredSize(new Dimension(960, 540));
 		
-		setClientChooserPane();
+		centerPane = new JPanel();
+		centerPane.setLayout(new BoxLayout(centerPane, BoxLayout.LINE_AXIS));
+		
+		clientChooserPane = new ClientChooserPane();
 		
 		setBookChooserPane();
 		
-		backButton = new JButton("Back");
-		backButton.addActionListener(new ActionListener() {
+		setOptionsPane(contentPane);
+		
+		//centerPane.add(Box.createHorizontalGlue());
+		centerPane.add(clientChooserPane);
+		centerPane.add(Box.createRigidArea(new Dimension(20, 0)));
+		centerPane.add(new JSeparator(SwingConstants.VERTICAL));
+		centerPane.add(Box.createRigidArea(new Dimension(20, 0)));
+		centerPane.add(bookChooserPane);
+		//centerPane.add(Box.createHorizontalGlue());
+		
+		add(centerPane, BorderLayout.CENTER);
+		add(optionsPane, BorderLayout.PAGE_END);
+	}
+	
+	private void setOptionsPane(JPanel contentPane) {
+		
+		optionsPane = new JPanel();
+		optionsPane.setLayout(new BoxLayout(optionsPane, BoxLayout.LINE_AXIS));
+		
+		JButton submitButton = new JButton("Lend");
+		submitButton.setFocusPainted(false);
+		submitButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ev) {
 				CardLayout cl = (CardLayout)contentPane.getLayout();
 				cl.show(contentPane, MainFrame.MAIN_MENU_STRING);
+				//TODO: change the status of the lent books to taken
 				MainMenu.RECENT_ACTIVITY_PANE.newActivity("Lended a book!");
 			}
 		});
 		
-		add(clientChooserPane);
-		add(new JSeparator(SwingConstants.VERTICAL));
-		add(bookChooserPane);
-		add(backButton);
-	}
-	
-	private void setClientChooserPane() {
+		JButton backButton = new JButton("Back");
+		backButton.setFocusPainted(false);
+		backButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent ev) {
+				CardLayout cl = (CardLayout)contentPane.getLayout();
+				cl.show(contentPane, MainFrame.MAIN_MENU_STRING);
+			}
+		});
 		
-		clientChooserPane = new JPanel();
-		clientChooserPane.setLayout(new BoxLayout(clientChooserPane, BoxLayout.PAGE_AXIS));
+		optionsPane.add(Box.createHorizontalGlue());
+		optionsPane.add(submitButton);
+		optionsPane.add(Box.createRigidArea(new Dimension(20, 0)));
+		optionsPane.add(backButton);
+		optionsPane.add(Box.createHorizontalGlue());
 		
-		ClientModels.ClientListModel listModel;
-		
-		listModel = MainFrame.clientModels.listModel;
-		
-		clientList = new JList<String>();
-		clientList.setModel(listModel);
-		clientList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		clientList.setLayoutOrientation(JList.VERTICAL);
-		clientList.setVisibleRowCount(-1);
-		JScrollPane listScrollPane = new JScrollPane(clientList);
-		
-		clientChooserPane.add(listScrollPane);
 	}
 	
 	private void setBookChooserPane() {

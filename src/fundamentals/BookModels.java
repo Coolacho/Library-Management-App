@@ -24,6 +24,8 @@ public class BookModels {
 		
 	}
 	
+	//++++++++++++++++++++++++++++++++++ TABLE MODEL +++++++++++++++++++++++++++++++++++++++++++
+	
 	public class BookTableModel extends AbstractTableModel{
 
 		private final String[] columnNames = {"Book ID", "Title", "Author", "Taken"};
@@ -111,6 +113,8 @@ public class BookModels {
 		
 		private static final long serialVersionUID = 1L;
 	}
+	
+	//+++++++++++++++++++++++++++++ LIST MODEL +++++++++++++++++++++++++++++++++++++
 	
 	public class BookListModel extends AbstractListModel<String>{
 		

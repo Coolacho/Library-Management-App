@@ -125,7 +125,7 @@ public final class LoginSystemUtils {
 				
 			}
 			Book.NUMBER_OF_BOOKS = 0;
-			return null;
+			return new ArrayList<Book>();
 		}
 		
 }

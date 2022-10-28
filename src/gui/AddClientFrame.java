@@ -107,7 +107,7 @@ public class AddClientFrame extends JFrame{
 		photoLabel.setMinimumSize(new Dimension(125,150));
 		photoLabel.setPreferredSize(new Dimension(125,150));
 		photoLabel.setMaximumSize(new Dimension(125,150));
-		photoLabel.setBackground(Color.gray);
+		photoLabel.setBackground(Color.GRAY);
 		photoLabel.setOpaque(true);
 		photoLabel.setLabelFor(photoButton);
 		photoLabel.setAlignmentX(CENTER_ALIGNMENT);
@@ -125,7 +125,7 @@ public class AddClientFrame extends JFrame{
 				if (result == JFileChooser.APPROVE_OPTION) {
 					File selectedFile = chooser.getSelectedFile();
 					photoPath = selectedFile.getAbsolutePath();
-					photoLabel.setIcon(ResizeImage(photoPath));
+					photoLabel.setIcon(Client.ResizeImage(photoPath, photoLabel));
 					photoLabel.setText(null);
 					submitLabel.setText("");
 				}
@@ -137,15 +137,6 @@ public class AddClientFrame extends JFrame{
 		photoPanel.add(Box.createRigidArea(new Dimension(0,15)));
 		photoPanel.add(photoButton);
 		photoPanel.add(Box.createVerticalGlue());
-	}
-	
-	private ImageIcon ResizeImage(String ImagePath) {
-		
-		ImageIcon rawImageIcon = new ImageIcon(ImagePath);
-		Image rawImage = rawImageIcon.getImage();
-		Image scaledImage = rawImage.getScaledInstance(photoLabel.getWidth(), photoLabel.getHeight(), Image.SCALE_SMOOTH);
-		ImageIcon scaledImageIcon = new ImageIcon(scaledImage);
-		return scaledImageIcon;
 	}
 	
 	private void setSubmitPanel() {

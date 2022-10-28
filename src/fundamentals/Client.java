@@ -1,6 +1,11 @@
 package fundamentals;
 
+import java.awt.Image;
 import java.io.Serializable;
+import java.util.ArrayList;
+
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 
 public class Client implements Serializable{
 	
@@ -10,6 +15,7 @@ public class Client implements Serializable{
 	private String email;
 	private String telephone;
 	private String photoPath;
+	private ArrayList<Book> booksTaken;
 	public static int NUMBER_OF_CLIENTS;
 	
 	
@@ -21,6 +27,7 @@ public class Client implements Serializable{
 		setEmail(email);
 		setTelephone(telephone);
 		setPhoto(photoPath);
+		setBooksTaken();
 		
 	}
 	
@@ -49,6 +56,10 @@ public class Client implements Serializable{
 		this.photoPath = photoPath;
 	}
 	
+	public void setBooksTaken() {
+		this.booksTaken = new ArrayList<Book>();
+	}
+	
 	//GETTERS
 	public String getId() {
 		return this.id;
@@ -72,6 +83,32 @@ public class Client implements Serializable{
 	
 	public String getPhotoPath() {
 		return this.photoPath;
+	}
+	
+	public ArrayList<Book> getBooksTaken() {
+		return this.booksTaken;
+	}
+	
+	
+	//Functions for taking and returning books
+	public void takeBook(Book book) {
+		book.takeBook();
+		this.booksTaken.add(book);
+	}
+	
+	public void returnBook(Book book) {
+		book.returnBook();
+		this.booksTaken.remove(book);
+	}
+	
+	//Function for resizing the client photo to fit in a JLabel
+	public static ImageIcon ResizeImage(String ImagePath, JLabel photoLabel) {
+		
+		ImageIcon rawImageIcon = new ImageIcon(ImagePath);
+		Image rawImage = rawImageIcon.getImage();
+		Image scaledImage = rawImage.getScaledInstance(photoLabel.getWidth(), photoLabel.getHeight(), Image.SCALE_SMOOTH);
+		ImageIcon scaledImageIcon = new ImageIcon(scaledImage);
+		return scaledImageIcon;
 	}
 	
 	private static final long serialVersionUID = 1L;
