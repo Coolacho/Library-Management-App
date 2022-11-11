@@ -92,6 +92,7 @@ public class MainMenu extends JPanel{
 		
 		lendABookButton.addActionListener( new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
+				MainFrame.LENDING_BOOK_MENU.clearPane();
 				CardLayout cl = (CardLayout)contentPane.getLayout();
 				cl.show(contentPane, MainFrame.LENDING_BOOK_MENU_STRING);
 			}

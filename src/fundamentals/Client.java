@@ -96,9 +96,21 @@ public class Client implements Serializable{
 		this.booksTaken.add(book);
 	}
 	
+	public void takeBook(ArrayList<Book> books) {
+		for (Book book: books) {
+			takeBook(book);
+		}
+	}
+	
 	public void returnBook(Book book) {
 		book.returnBook();
 		this.booksTaken.remove(book);
+	}
+	
+	public void returnBook(ArrayList<Book> books) {
+		for (Book book: books) {
+			returnBook(book);
+		}
 	}
 	
 	//Function for resizing the client photo to fit in a JLabel

@@ -111,6 +111,7 @@ public class AddClientFrame extends JFrame{
 		photoLabel.setOpaque(true);
 		photoLabel.setLabelFor(photoButton);
 		photoLabel.setAlignmentX(CENTER_ALIGNMENT);
+		photoLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		
 		photoButton = new JButton("Browse");
 		photoButton.setAlignmentX(CENTER_ALIGNMENT);

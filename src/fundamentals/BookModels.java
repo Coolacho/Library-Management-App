@@ -137,6 +137,14 @@ public class BookModels {
 		public void removeBookFromList(int rowIndex) {
 			fireIntervalRemoved(this, rowIndex, rowIndex);
 		}
+		
+		public ArrayList<Book> getSelectedBooks(int[] indices) {
+			ArrayList<Book> selectedBooks = new ArrayList<Book>();
+			for (int i: indices) {
+				selectedBooks.add(books.get(i));
+			}
+			return selectedBooks;
+		}
 
 		private static final long serialVersionUID = 1L;
 		
