@@ -42,7 +42,7 @@ public class TakenBooksTableModel extends AbstractTableModel{
 		Book takenBook = takenBooks.get(rowIndex);
 		
 		switch(columnIndex) {
-			case 0: return rowIndex;
+			case 0: return rowIndex+1;
 			case 1: return takenBook.getTitle();
 			case 2: return takenBook.getBookStatus();
 			default: return null;

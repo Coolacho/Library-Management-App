@@ -9,30 +9,76 @@ import javax.swing.JLabel;
 
 public class Client implements Serializable{
 	
-	private String id;
+	private int id;
 	private String name;
 	private byte age;
 	private String email;
 	private String telephone;
 	private String photoPath;
-	private ArrayList<Book> booksTaken;
-	public static int NUMBER_OF_CLIENTS;
+	private ArrayList<Book> takenBooks;
+	public static int NEXT_ID;
 	
+	private static final long serialVersionUID = 1L;
 	
 	public Client(String name, byte age, String email, String telephone, String photoPath) {
 		
-		setId(String.valueOf(++NUMBER_OF_CLIENTS));
+		setId(++NEXT_ID);
 		setName(name);
 		setAge(age);
 		setEmail(email);
 		setTelephone(telephone);
 		setPhoto(photoPath);
-		setBooksTaken();
+		setTakenBooks();
 		
 	}
 	
+	public Client(int id, String name, byte age, String email, String telephone, String photoPath) {
+		
+		setId(id);
+		setName(name);
+		setAge(age);
+		setEmail(email);
+		setTelephone(telephone);
+		setPhoto(photoPath);
+		setTakenBooks();
+		
+	}
+	
+	//Functions for taking and returning books
+	public void takeBook(Book book) {
+		book.takeBook();
+		this.takenBooks.add(book);
+	}
+	
+	public void takeBook(ArrayList<Book> books) {
+		for (Book book: books) {
+			takeBook(book);
+		}
+	}
+	
+	public void returnBook(Book book) {
+		book.returnBook();
+		this.takenBooks.remove(book);
+	}
+	
+	public void returnBook(ArrayList<Book> books) {
+		for (Book book: books) {
+			returnBook(book);
+		}
+	}
+	
+	//Function for resizing the client photo to fit in a JLabel
+	public static ImageIcon ResizeImage(String ImagePath, JLabel photoLabel) {
+		
+		ImageIcon rawImageIcon = new ImageIcon(ImagePath);
+		Image rawImage = rawImageIcon.getImage();
+		Image scaledImage = rawImage.getScaledInstance(photoLabel.getWidth(), photoLabel.getHeight(), Image.SCALE_SMOOTH);
+		ImageIcon scaledImageIcon = new ImageIcon(scaledImage);
+		return scaledImageIcon;
+	}
+	
 	//SETTERS
-	public void setId(String id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 	
@@ -56,12 +102,12 @@ public class Client implements Serializable{
 		this.photoPath = photoPath;
 	}
 	
-	public void setBooksTaken() {
-		this.booksTaken = new ArrayList<Book>();
+	public void setTakenBooks() {
+		this.takenBooks = new ArrayList<Book>();
 	}
 	
 	//GETTERS
-	public String getId() {
+	public int getId() {
 		return this.id;
 	}
 	
@@ -85,43 +131,8 @@ public class Client implements Serializable{
 		return this.photoPath;
 	}
 	
-	public ArrayList<Book> getBooksTaken() {
-		return this.booksTaken;
+	public ArrayList<Book> getTakenBooks() {
+		return this.takenBooks;
 	}
 	
-	
-	//Functions for taking and returning books
-	public void takeBook(Book book) {
-		book.takeBook();
-		this.booksTaken.add(book);
-	}
-	
-	public void takeBook(ArrayList<Book> books) {
-		for (Book book: books) {
-			takeBook(book);
-		}
-	}
-	
-	public void returnBook(Book book) {
-		book.returnBook();
-		this.booksTaken.remove(book);
-	}
-	
-	public void returnBook(ArrayList<Book> books) {
-		for (Book book: books) {
-			returnBook(book);
-		}
-	}
-	
-	//Function for resizing the client photo to fit in a JLabel
-	public static ImageIcon ResizeImage(String ImagePath, JLabel photoLabel) {
-		
-		ImageIcon rawImageIcon = new ImageIcon(ImagePath);
-		Image rawImage = rawImageIcon.getImage();
-		Image scaledImage = rawImage.getScaledInstance(photoLabel.getWidth(), photoLabel.getHeight(), Image.SCALE_SMOOTH);
-		ImageIcon scaledImageIcon = new ImageIcon(scaledImage);
-		return scaledImageIcon;
-	}
-	
-	private static final long serialVersionUID = 1L;
 }

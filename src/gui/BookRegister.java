@@ -1,41 +1,37 @@
 package gui;
 
-import javax.swing.*;
 import javax.swing.table.*;
 
 import fundamentals.RegisterTemplate;
-import fundamentals.BookModels;
+import fundamentals.BookTableModel;
 
 public class BookRegister extends RegisterTemplate{
 	
-	public BookModels.BookTableModel tableModel;
+	private static final long serialVersionUID = 1L;
 	
-	public BookRegister(JPanel contentPane) {
-		super(contentPane);
+	public BookRegister(MainFrame mainFrame) {
+		super(mainFrame);
+	}
+	
+	@Override
+	protected void setTableModel(MainFrame mainFrame) {
+		table.setModel(mainFrame.getBookModels().getTableModel());
 	}
 
 	@Override
-	protected void setTableModel() {
-		tableModel = MainFrame.bookModels.tableModel;
-		table.setModel(tableModel);
-	}
-
-	@Override
-	protected void setTableSorter() {
-		tableSorter = new TableRowSorter<BookModels.BookTableModel>(tableModel);
+	protected void setTableSorter(MainFrame mainFrame) {
+		tableSorter = new TableRowSorter<BookTableModel>(mainFrame.getBookModels().getTableModel());
 		table.setRowSorter(tableSorter);
 	}
 
 	@Override
-	protected void invokeAddFrame() {
-		new AddBookFrame();
+	protected void invokeAddFrame(MainFrame mainFrame) {
+		new AddBookFrame(mainFrame);
 	}
 
 	@Override
-	protected void removeSelection() {
-		tableModel.removeBook(currentRow);
+	protected void removeSelection(MainFrame mainFrame) {
+		mainFrame.getBookModels().removeBook(mainFrame.getDatabase().getConnection(), currentRow);
 	}
-	
-	private static final long serialVersionUID = 1L;
 	
 }

@@ -5,19 +5,51 @@ import java.time.LocalDateTime;
 
 public class Book implements Serializable{
 	
+	private int id;
 	private String title;
 	private String author;
-	private String id;
-	private boolean taken;
-	public static int NUMBER_OF_BOOKS;
+	private boolean status;
+	public static int NEXT_ID;
 	private LocalDateTime timeTaken;
 	private LocalDateTime timeReturned;
 	
+	private static final long serialVersionUID = 1L;
+	
 	public Book(String title, String author) {
+		setId(++NEXT_ID);
 		setTitle(title);
 		setAuthor(author);
-		setId(String.valueOf(++NUMBER_OF_BOOKS));
-		setTaken(false);
+		setStatus(false);
+	}
+	
+	public Book(int id, String title, String author, boolean status) {
+		setId(id);
+		setTitle(title);
+		setAuthor(author);
+		setStatus(status);
+	}
+	
+	//Functions to manage the take and return of a book
+	public void takeBook() {
+		setStatus(true);
+		setTimeTaken();
+	}
+	
+	public void returnBook() {
+		setStatus(false);
+		setTimeReturned();
+	}
+	
+	public String getBookStatus() {
+		if (timeReturned == null) {
+			return "Taken";
+		}
+		else if (timeReturned.isBefore(timeTaken.plusDays(14))) {
+			return "Returned";
+		}
+		else {
+			return "Overdue";
+		}
 	}
 	
 	//SETTERS
@@ -29,12 +61,12 @@ public class Book implements Serializable{
 		this.author = author;
 	}
 	
-	public void setId(String id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 	
-	public void setTaken(boolean taken) {
-		this.taken = taken;
+	public void setStatus(boolean status) {
+		this.status = status;
 	}
 	
 	public void setTimeTaken() {
@@ -55,12 +87,12 @@ public class Book implements Serializable{
 		return this.author;
 	}
 	
-	public String getId() {
+	public int getId() {
 		return this.id;
 	}
 	
-	public boolean getTaken() {
-		return this.taken;
+	public boolean getStatus() {
+		return this.status;
 	}
 	
 	public LocalDateTime getTimeTaken() {
@@ -70,30 +102,5 @@ public class Book implements Serializable{
 	public LocalDateTime getTimeReturned() {
 		return this.timeReturned;
 	}
-	
-	//Functions to manage the take and return of a book
-	public void takeBook() {
-		setTaken(true);
-		setTimeTaken();
-	}
-	
-	public void returnBook() {
-		setTaken(false);
-		setTimeReturned();
-	}
-	
-	public String getBookStatus() {
-		if (timeReturned == null) {
-			return "Taken";
-		}
-		else if (timeReturned.isBefore(timeTaken.plusDays(14))) {
-			return "Returned";
-		}
-		else {
-			return "Overdue";
-		}
-	}
-	
-	private static final long serialVersionUID = 1L;
 	
 }

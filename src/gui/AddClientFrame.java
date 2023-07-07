@@ -34,7 +34,7 @@ public class AddClientFrame extends JFrame{
 	private JButton photoButton;
 	private String photoPath = "";
 
-	public AddClientFrame() {
+	public AddClientFrame(MainFrame mainFrame) {
 		
 		setTitle("Add New Client");
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -54,7 +54,7 @@ public class AddClientFrame extends JFrame{
 		
 		setFormPanel();
 		
-		setSubmitPanel();
+		setSubmitPanel(mainFrame);
 		
 		setPhotoChooser();
 		
@@ -140,7 +140,7 @@ public class AddClientFrame extends JFrame{
 		photoPanel.add(Box.createVerticalGlue());
 	}
 	
-	private void setSubmitPanel() {
+	private void setSubmitPanel(MainFrame mainFrame) {
 		
 		submitPanel = new JPanel();
 		submitPanel.setLayout(new BoxLayout(submitPanel, BoxLayout.PAGE_AXIS));
@@ -181,9 +181,14 @@ public class AddClientFrame extends JFrame{
 				
 				if (isInfoValid ) {
 					if (!photoPath.isEmpty()) {
-						MainFrame.CLIENT_REGISTER.tableModel.addClient(new Client(textFields[0].getText(), Byte.parseByte(textFields[1].getText()), textFields[2].getText(), textFields[3].getText(), photoPath));
-						dispose();
-						MainMenu.RECENT_ACTIVITY_PANE.newActivity("Added a new client!");
+						Client client = new Client(textFields[0].getText(), Byte.parseByte(textFields[1].getText()), textFields[2].getText(), textFields[3].getText(), photoPath);
+						if (mainFrame.getClientModels().addClient(mainFrame.getDatabase().getConnection(), client)) {
+							dispose();
+							MainMenu.RECENT_ACTIVITY_PANE.newActivity("Added a new client!");	
+						}
+						else {
+							submitLabel.setText("Can't add client! Please try again!");
+						}
 					}
 					else {
 						submitLabel.setText("Please choose a photo!");

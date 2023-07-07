@@ -8,7 +8,6 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import fundamentals.Client;
-import fundamentals.ClientModels;
 import fundamentals.TakenBooksTableModel;
 
 public class ClientChooserPane extends JPanel{
@@ -21,7 +20,6 @@ public class ClientChooserPane extends JPanel{
 	private final static String CLIENT_PREVIEW_STRING = "Client Preview";
 	
 	private JList<String> clientList;
-	private ClientModels.ClientListModel clientListModel;
 	
 	private Client selectedClient;
 	
@@ -30,18 +28,18 @@ public class ClientChooserPane extends JPanel{
 	private JTable takenBooksTable;
 	private TakenBooksTableModel takenBooksTableModel;
 
-	public ClientChooserPane() {
+	public ClientChooserPane(MainFrame mainFrame) {
 		
 		setLayout(new CardLayout());
 		setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 		setMaximumSize(new Dimension(350, 440));
 		
-		setClientListCard();
+		setClientListCard(mainFrame);
 		setClientPreviewCard();
 		
 	}
 	
-	private void setClientListCard() {
+	private void setClientListCard(MainFrame mainFrame) {
 		
 		clientListCard = new JPanel();
 		clientListCard.setLayout(new BorderLayout());
@@ -50,10 +48,8 @@ public class ClientChooserPane extends JPanel{
 		title.setFont(new Font("Times New Roman", Font.BOLD, 25));
 		title.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
 		
-		clientListModel = MainFrame.clientModels.listModel;
-		
 		clientList = new JList<String>();
-		clientList.setModel(clientListModel);
+		clientList.setModel(mainFrame.getClientModels().getListModel());
 		clientList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		clientList.setLayoutOrientation(JList.VERTICAL);
 		clientList.setVisibleRowCount(-1);
@@ -69,7 +65,7 @@ public class ClientChooserPane extends JPanel{
 			public void actionPerformed(ActionEvent ev) {
 				CardLayout cl = (CardLayout)contentPane.getLayout();
 				cl.show(contentPane, CLIENT_PREVIEW_STRING);
-				setClientInfo();
+				setClientInfo(mainFrame.getClientModels().getClientAt(clientList.getSelectedIndex()));
 			}
 		});
 		
@@ -165,9 +161,9 @@ public class ClientChooserPane extends JPanel{
 		
 	}
 	
-	private void setClientInfo() {
+	private void setClientInfo(Client selectedClient) {
 		
-		setSelectedClient(clientListModel.getClient(clientList.getSelectedIndex()));
+		setSelectedClient(selectedClient);
 		
 		photoLabel.setIcon(Client.ResizeImage(selectedClient.getPhotoPath(), photoLabel));
 		
@@ -178,7 +174,7 @@ public class ClientChooserPane extends JPanel{
 									"<br><b>Email:</b> " + selectedClient.getEmail() +
 									"<br><b>Telephone:</b> " + selectedClient.getTelephone() + "</div>");
 		
-		takenBooksTableModel = new TakenBooksTableModel(selectedClient.getBooksTaken());
+		takenBooksTableModel = new TakenBooksTableModel(selectedClient.getTakenBooks());
 		takenBooksTable.setModel(takenBooksTableModel);
 		
 	}

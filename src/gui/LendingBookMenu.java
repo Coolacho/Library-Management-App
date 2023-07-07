@@ -13,23 +13,23 @@ public class LendingBookMenu extends JPanel{
 	private ClientChooserPane clientChooserPane;
 	private BookChooserPane bookChooserPane;
 	
-	public LendingBookMenu(JPanel contentPane) {
+	public LendingBookMenu(MainFrame mainFrame) {
 		
 		//set up the panel
 		setLayout(new BorderLayout());
 		setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 		setOpaque(true);
-		setMinimumSize(new Dimension(960, 540));
-		setPreferredSize(new Dimension(960, 540));
+		setMinimumSize(mainFrame.getWindowSize());
+		setPreferredSize(mainFrame.getWindowSize());
 		
 		centerPane = new JPanel();
 		centerPane.setLayout(new BoxLayout(centerPane, BoxLayout.LINE_AXIS));
 		
-		clientChooserPane = new ClientChooserPane();
+		clientChooserPane = new ClientChooserPane(mainFrame);
 		
-		bookChooserPane = new BookChooserPane();
+		bookChooserPane = new BookChooserPane(mainFrame);
 		
-		setOptionsPane(contentPane);
+		setOptionsPane(mainFrame.getContentPane());
 		
 		centerPane.add(Box.createHorizontalGlue());
 		centerPane.add(clientChooserPane);
@@ -62,9 +62,8 @@ public class LendingBookMenu extends JPanel{
 				}
 				else {
 					clientChooserPane.getSelectedClient().takeBook(bookChooserPane.getSelectedBooks());
-					CardLayout cl = (CardLayout)contentPane.getLayout();
-					cl.show(contentPane, MainFrame.MAIN_MENU_STRING);
 					MainMenu.RECENT_ACTIVITY_PANE.newActivity("Lended a book!");
+					clearPane();
 				}
 				
 			}
@@ -75,7 +74,7 @@ public class LendingBookMenu extends JPanel{
 		backButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ev) {
 				CardLayout cl = (CardLayout)contentPane.getLayout();
-				cl.show(contentPane, MainFrame.MAIN_MENU_STRING);
+				cl.show(contentPane, MainFrame.getMainMenuString());
 			}
 		});
 		

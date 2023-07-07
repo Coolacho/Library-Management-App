@@ -3,7 +3,8 @@ package gui;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import fundamentals.*;
+
+import fundamentals.Book;
 
 public class AddBookFrame extends JFrame{
 
@@ -19,7 +20,7 @@ public class AddBookFrame extends JFrame{
 	private JPanel formPane;
 	private JPanel buttonPane;
 
-	public AddBookFrame() {
+	public AddBookFrame(MainFrame mainFrame) {
 		setTitle("Add New Book");
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		setVisible(true);
@@ -58,9 +59,11 @@ public class AddBookFrame extends JFrame{
 				setMinimumSize(new Dimension(350,210));
 				setPreferredSize(new Dimension(350,210));
 				if (!(title.isEmpty()) &&  !(author.isEmpty())) {
-					MainFrame.BOOK_REGISTER.tableModel.addBook(new Book(title, author));
-					dispose();
-					MainMenu.RECENT_ACTIVITY_PANE.newActivity("Added a new book!");
+					Book book = new Book(title, author);
+					if (mainFrame.getBookModels().addBook(mainFrame.getDatabase().getConnection(), book)) {
+						dispose();
+						MainMenu.RECENT_ACTIVITY_PANE.newActivity("Added a new book!");
+					}
 				}
 				else {
 					buttonMessage.setVisible(true);

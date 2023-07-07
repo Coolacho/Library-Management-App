@@ -1,42 +1,36 @@
 package gui;
 
-import javax.swing.*;
 import javax.swing.table.*;
 
 import fundamentals.RegisterTemplate;
-import fundamentals.ClientModels;
+import fundamentals.ClientTableModel;
 
 public class ClientRegister extends RegisterTemplate{
-
-		public ClientModels.ClientTableModel tableModel;
 	
-		public ClientRegister(JPanel contentPane) {
-			super(contentPane);
+		private static final long serialVersionUID = 1L;
+	
+		public ClientRegister(MainFrame mainFrame) {
+			super(mainFrame);
+		}
+		
+		@Override
+		protected void setTableModel(MainFrame mainFrame) {
+			table.setModel(mainFrame.getClientModels().getTableModel());
 		}
 
-
 		@Override
-		protected void setTableModel() {
-			tableModel = MainFrame.clientModels.tableModel;
-			table.setModel(tableModel);
-		}
-
-		@Override
-		protected void setTableSorter() {
-			tableSorter = new TableRowSorter<ClientModels.ClientTableModel>(tableModel);
+		protected void setTableSorter(MainFrame mainFrame) {
+			tableSorter = new TableRowSorter<ClientTableModel>(mainFrame.getClientModels().getTableModel());
 			table.setRowSorter(tableSorter);
 		}
 
 		@Override
-		protected void invokeAddFrame() {
-			new AddClientFrame();
+		protected void invokeAddFrame(MainFrame mainFrame) {
+			new AddClientFrame(mainFrame);
 		}
 
 		@Override
-		protected void removeSelection() {
-			tableModel.removeClient(currentRow);
+		protected void removeSelection(MainFrame mainFrame) {
+			mainFrame.getClientModels().removeClient(mainFrame.getDatabase().getConnection(), currentRow);
 		}
-	
-		private static final long serialVersionUID = 1L;
-	
 }

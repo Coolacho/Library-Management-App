@@ -10,7 +10,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import fundamentals.Book;
-import fundamentals.BookModels;
+import fundamentals.BookListModel;
 
 public class BookChooserPane extends JPanel{
 	
@@ -22,22 +22,25 @@ public class BookChooserPane extends JPanel{
 	private final static String BOOK_PREVIEW_STRING = "Book Preview";
 	
 	private JList<String> bookList;
-	private BookModels.BookListModel listModel;
+	private BookListModel listModel;
+	private JScrollPane listScrollPane;
 	
 	private ArrayList<Book> selectedBooks;
 	
-	public BookChooserPane() {
+	private static final long serialVersionUID = 1L;
+	
+	public BookChooserPane(MainFrame mainFrame) {
 		
 		setLayout(new CardLayout());
 		setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 		setMaximumSize(new Dimension(350, 440));
 		
-		setBookListCard();
+		setBookListCard(mainFrame);
 		setBookPreviewCard();
 		
 	}
 	
-	private void setBookListCard() {
+	private void setBookListCard(MainFrame mainFrame) {
 		
 		bookListCard = new JPanel();
 		bookListCard.setLayout(new BorderLayout());
@@ -46,43 +49,15 @@ public class BookChooserPane extends JPanel{
 		title.setFont(new Font("Times New Roman", Font.BOLD, 25));
 		title.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
 		
-		listModel = MainFrame.bookModels.listModel;
+		listModel = mainFrame.getBookModels().getListModel();
 		
 		bookList = new JList<String>();
 		bookList.setModel(listModel);
 		bookList.setLayoutOrientation(JList.VERTICAL);
 		bookList.setVisibleRowCount(-1);
-		JScrollPane listScrollPane = new JScrollPane(bookList);
+		listScrollPane = new JScrollPane(bookList);
 		
-		JPanel optionsPane = new JPanel();
-		optionsPane.setLayout(new BoxLayout(optionsPane, BoxLayout.LINE_AXIS));
-		optionsPane.setBorder(BorderFactory.createEmptyBorder(15, 15, 0, 15));
-		
-		JButton chooseButton = new JButton("Choose");
-		chooseButton.setFocusPainted(false);
-		chooseButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent ev) {
-				CardLayout cl = (CardLayout)contentPane.getLayout();
-				cl.show(contentPane, BOOK_PREVIEW_STRING);
-				setBooksInfo();
-			}
-		});
-		
-		JButton cancelButton = new JButton("Cancel");
-		cancelButton.setFocusPainted(false);
-		cancelButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent ev) {
-				bookList.clearSelection();
-			}
-		});
-		
-		optionsPane.add(Box.createHorizontalGlue());
-		optionsPane.add(chooseButton);
-		optionsPane.add(Box.createRigidArea(new Dimension(20, 0)));
-		optionsPane.add(cancelButton);
-		optionsPane.add(Box.createHorizontalGlue());
-		
-		optionsPane.setVisible(false);
+		JPanel optionsPane = setOptionsPane();
 		
 		bookList.addListSelectionListener(new ListSelectionListener() {
 			@Override
@@ -107,9 +82,47 @@ public class BookChooserPane extends JPanel{
 		
 	}
 	
+	private JPanel setOptionsPane() {
+		
+		JPanel optionsPane = new JPanel();
+		optionsPane.setLayout(new BoxLayout(optionsPane, BoxLayout.LINE_AXIS));
+		optionsPane.setBorder(BorderFactory.createEmptyBorder(15, 15, 0, 15));
+		
+		JButton chooseButton = new JButton("Choose");
+		chooseButton.setFocusPainted(false);
+		chooseButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent ev) {
+				CardLayout cl = (CardLayout)contentPane.getLayout();
+				cl.show(contentPane, BOOK_PREVIEW_STRING);
+				selectedBooks = listModel.getSelectedBooks(bookList.getSelectedIndices());
+				bookPreviewCard.add(listScrollPane, BorderLayout.CENTER);
+				bookList.clearSelection();
+			}
+		});
+		
+		JButton cancelButton = new JButton("Cancel");
+		cancelButton.setFocusPainted(false);
+		cancelButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent ev) {
+				bookList.clearSelection();
+			}
+		});
+		
+		optionsPane.add(Box.createHorizontalGlue());
+		optionsPane.add(chooseButton);
+		optionsPane.add(Box.createRigidArea(new Dimension(20, 0)));
+		optionsPane.add(cancelButton);
+		optionsPane.add(Box.createHorizontalGlue());
+		
+		optionsPane.setVisible(false);
+		
+		return optionsPane;
+	}
+	
 	private void setBookPreviewCard() {
 		
 		bookPreviewCard = new JPanel();
+		bookPreviewCard.setLayout(new BorderLayout());
 		
 		JLabel title = new JLabel("Selected book(s):");
 		title.setFont(new Font("Times New Roman", Font.BOLD, 25));
@@ -121,25 +134,23 @@ public class BookChooserPane extends JPanel{
 			public void actionPerformed(ActionEvent ev) {
 				CardLayout cl = (CardLayout)contentPane.getLayout();
 				cl.show(contentPane, BOOK_LIST_STRING);
+				listModel.getAllBooks();
+				bookListCard.add(listScrollPane, BorderLayout.CENTER);
 			}
 		});
 		
-		bookPreviewCard.add(title);
-		bookPreviewCard.add(cancelButton);
+		bookPreviewCard.add(title, BorderLayout.PAGE_START);
+		bookPreviewCard.add(cancelButton, BorderLayout.PAGE_END);
 		
 		add(bookPreviewCard, BOOK_PREVIEW_STRING);
-		
-	}
-	
-	private void setBooksInfo() {
-		
-		setSelectedBooks(listModel.getSelectedBooks(bookList.getSelectedIndices()));
 		
 	}
 	
 	public void clearPane() {
 		bookList.clearSelection();
 		setSelectedBooks(null);
+		listModel.updateAllBooks();
+		bookListCard.add(listScrollPane, BorderLayout.CENTER);
 		CardLayout cl = (CardLayout)contentPane.getLayout();
 		cl.show(contentPane, BOOK_LIST_STRING);
 	}
@@ -152,5 +163,4 @@ public class BookChooserPane extends JPanel{
 		this.selectedBooks = selectedBooks;
 	}
 
-	private static final long serialVersionUID = 1L;
 }

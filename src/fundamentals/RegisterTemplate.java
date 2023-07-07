@@ -33,20 +33,20 @@ public abstract class RegisterTemplate extends JPanel implements ListSelectionLi
 	private JButton editButton;
 	private JButton cancelSelectionButton;
 
-	abstract protected void setTableModel();
-	abstract protected void setTableSorter();
-	abstract protected void invokeAddFrame();
-	abstract protected void removeSelection();
+	abstract protected void setTableModel(MainFrame mainFrame);
+	abstract protected void setTableSorter(MainFrame mainFrame);
+	abstract protected void invokeAddFrame(MainFrame mainFrame);
+	abstract protected void removeSelection(MainFrame mainFrame);
 	
 	//Class constructor that puts the whole Book register panel together (Table + Options menu)
-	public RegisterTemplate(JPanel contentPane) {
+	public RegisterTemplate(MainFrame mainFrame) {
 		setOpaque(true);
-		setMinimumSize(new Dimension(960, 540));
-		setPreferredSize(new Dimension(960, 540));
+		setMinimumSize(mainFrame.getWindowSize());
+		setPreferredSize(mainFrame.getWindowSize());
 		setLayout(new BorderLayout());
 		
-		setTable();
-		setOptionsMenu(contentPane);
+		setTable(mainFrame);
+		setOptionsMenu(mainFrame);
 		
 		add(scrollPane, BorderLayout.CENTER);
 		add(optionsMenu, BorderLayout.PAGE_END);
@@ -54,7 +54,7 @@ public abstract class RegisterTemplate extends JPanel implements ListSelectionLi
 	
 	
 	//Function to set the Table
-	private void setTable() {
+	private void setTable(MainFrame mainFrame) {
 		
 		//set the table
 		table = new JTable();
@@ -63,10 +63,10 @@ public abstract class RegisterTemplate extends JPanel implements ListSelectionLi
 		table.getSelectionModel().addListSelectionListener(this);
 		
 		//create and set table model
-		setTableModel();
+		setTableModel(mainFrame);
 		
 		//set the row sorter
-		setTableSorter();
+		setTableSorter(mainFrame);
 		
 		//Create the scroll pane and add the table to it.
         scrollPane = new JScrollPane(table);
@@ -74,20 +74,20 @@ public abstract class RegisterTemplate extends JPanel implements ListSelectionLi
 	}
 	
 	//set the options menu at the bottom which has two different panels that depend on whether a book is selected or not
-	private void setOptionsMenu(JPanel contentPane) {
+	private void setOptionsMenu(MainFrame mainFrame) {
 		optionsMenu = new JPanel();
 		optionsMenu.setLayout(new CardLayout());
 		optionsMenu.setBorder(BorderFactory.createEmptyBorder(5, 15, 5, 15));
 		
-		setRegisterOptions(contentPane);
-		setSelectionOptions();
+		setRegisterOptions(mainFrame);
+		setSelectionOptions(mainFrame);
 		
 		optionsMenu.add(registerOptions, REGISTER_OPTIONS);
 		optionsMenu.add(selectionOptions, SELECTION_OPTIONS);
 	}
 	
 	//Set the panel at the bottom with options when you enter the register (no book is selected)
-	private void setRegisterOptions(JPanel contentPane) {
+	private void setRegisterOptions(MainFrame mainFrame) {
 		registerOptions = new JPanel();
 		registerOptions.setLayout(new BoxLayout(registerOptions, BoxLayout.LINE_AXIS));
 		
@@ -127,8 +127,8 @@ public abstract class RegisterTemplate extends JPanel implements ListSelectionLi
 		backButton.setFocusPainted(false);
 		backButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
-				CardLayout cl = (CardLayout)contentPane.getLayout();
-				cl.show(contentPane, MainFrame.MAIN_MENU_STRING);
+				CardLayout cl = (CardLayout)mainFrame.getContentPane().getLayout();
+				cl.show(mainFrame.getContentPane(), MainFrame.getMainMenuString());
 			}
 		});
 		
@@ -139,7 +139,7 @@ public abstract class RegisterTemplate extends JPanel implements ListSelectionLi
 			public void actionPerformed(ActionEvent event) {
 				EventQueue.invokeLater(new Runnable() {
 					public void run() {
-						invokeAddFrame();
+						invokeAddFrame(mainFrame);
 					}
 				});
 			}
@@ -156,7 +156,7 @@ public abstract class RegisterTemplate extends JPanel implements ListSelectionLi
 	}
 	
 	//Set the panel at the bottom with options when you select a book
-	private void setSelectionOptions() {
+	private void setSelectionOptions(MainFrame mainFrame) {
 		selectionOptions = new JPanel();
 		
 		//REMOVE BOOK BUTTON
@@ -164,7 +164,7 @@ public abstract class RegisterTemplate extends JPanel implements ListSelectionLi
 		removeButton.setFocusPainted(false);
 		removeButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
-				removeSelection();
+				removeSelection(mainFrame);
 			}
 		});
 		

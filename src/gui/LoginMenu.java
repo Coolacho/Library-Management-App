@@ -5,8 +5,6 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.text.*;
 
-import fundamentals.LoginSystemUtils;
-
 public class LoginMenu extends JPanel{
 
 	private JTextPane title;
@@ -23,20 +21,20 @@ public class LoginMenu extends JPanel{
 	private JPanel formPane;
 	private JPanel buttonPane;
 	
-	public LoginMenu(JPanel contentPane) {
-		
-		LoginSystemUtils.loadUsers();
+	private static final long serialVersionUID = 1L;
+	
+	public LoginMenu(MainFrame mainFrame) {
 		
 		//set up the panel
 		setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 		setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 		setOpaque(true);
-		setMinimumSize(new Dimension(960, 540));
-		setPreferredSize(new Dimension(960, 540));
+		setMinimumSize(mainFrame.getWindowSize());
+		setPreferredSize(mainFrame.getWindowSize());
 		
 		//set up the title
 		title = new JTextPane();
-		title.setText("Welcome to Library Management.\nEnter username and password to Log in or Sign in:\n(Current number of users is "+ LoginSystemUtils.getCurrentNumberOfUsers() +"/10)");
+		title.setText("Welcome to Library Management.\nEnter username and password to Log in or Sign in:\n(Current number of users is " + mainFrame.getUserSystem().getUsers().size() + "/10)");
 		title.setOpaque(false);
 		title.setFont(new Font("Arial", Font.BOLD, 20));
 		title.setEditable(false);
@@ -78,11 +76,11 @@ public class LoginMenu extends JPanel{
 		signInButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
 				if (!(usernameField.getText().isEmpty() || passwordField.getPassword().length == 0)) {
-					if (LoginSystemUtils.addUser(usernameField.getText(), passwordField.getPassword())) {
+					if (mainFrame.getUserSystem().addUser(mainFrame.getDatabase().getConnection(), usernameField.getText(), passwordField.getPassword())) {
 						usernameField.setText("");
 						passwordField.setText("");
 						buttonMessage.setText("New account created successfully!");
-						title.setText("Welcome to Library Management.\nEnter username and password to Log in or Sign in:\n(Current number of users is "+ LoginSystemUtils.getCurrentNumberOfUsers() +"/10)");
+						title.setText("Welcome to Library Management.\nEnter username and password to Log in or Sign in:\n(Current number of users is " + mainFrame.getUserSystem().getUsers().size() + "/10)");
 					}
 					else {
 						buttonMessage.setText("Sorry, the account limit has been reached or the account already exists!");
@@ -99,10 +97,10 @@ public class LoginMenu extends JPanel{
 		loginButton.setFocusPainted(false);
 		loginButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
-				if (LoginSystemUtils.checkUserInfo(usernameField.getText(), passwordField.getPassword())) {
+				if (mainFrame.getUserSystem().checkUserInfo(usernameField.getText(), passwordField.getPassword())) {
 					//if true go to main menu
-					CardLayout cl = (CardLayout)contentPane.getLayout();
-					cl.show(contentPane, MainFrame.MAIN_MENU_STRING);
+					CardLayout cl = (CardLayout)mainFrame.getContentPane().getLayout();
+					cl.show(mainFrame.getContentPane(), MainFrame.getMainMenuString());
 					usernameField.setText("");
 					passwordField.setText("");
 					buttonMessage.setText("");
@@ -158,6 +156,4 @@ public class LoginMenu extends JPanel{
         add(buttonPane);
         add(Box.createVerticalGlue());
 	}
-	
-	private static final long serialVersionUID = 1L;
 }
