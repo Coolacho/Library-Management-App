@@ -6,6 +6,5 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Program Files/MariaDB 10.6/mariadb-java-client-3.1.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
